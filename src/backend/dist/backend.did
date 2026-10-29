@@ -1,0 +1,87 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type Result__1 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type PlayerStats = 
+ record {
+   bestScore: nat;
+   totalItemsCollected: nat;
+ };
+type PlayerSettings = 
+ record {
+   controlScheme: ControlScheme;
+   soundEnabled: bool;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type ControlScheme = 
+ variant {
+   arrows;
+   wasd;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result__1);
+  _internet_identity_sign_in_start: () -> (blob);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  execute: (qJson: text) -> (Result) query;
+  /// Static behavioral documentation for the Canine Courier backend.
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  /// Return the caller's saved settings.
+  getMySettings: () -> (opt PlayerSettings) query;
+  /// Return the caller's best score and total items collected.
+  getMyStats: () -> (opt PlayerStats) query;
+  isCallerAdmin: () -> (bool) query;
+  /// Record a finished run for the caller.
+  recordRun: (score: nat, itemsCollected: nat) -> (PlayerStats);
+  /// Save the caller's settings.
+  saveMySettings: (value: PlayerSettings) -> (PlayerSettings);
+  schema: () -> (text) query;
+}

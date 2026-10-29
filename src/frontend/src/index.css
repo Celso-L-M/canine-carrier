@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Canine Courier — Retro 8-bit arcade visual system
+   Palette: forest-black ground, botanical-green hedges,
+   amber-gold + electric-lime accents (Sniff), light-blue hazards.
+   ============================================================ */
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/DMSans.woff2") format("woff2");
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    /* Blocky terminal monospace drives the arcade HUD; DM Sans for body copy */
+    --font-display: "JetBrains Mono", monospace;
+    --font-body: "DM Sans", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* 8-bit aesthetic = hard square corners, no soft radii */
+    --radius: 0rem;
+
+    /* Dark forest-green arcade ground (single intentional dark theme) */
+    --background: 0.16 0.035 155;
+    --foreground: 0.94 0.03 150;
+
+    --card: 0.2 0.04 155;
+    --card-foreground: 0.94 0.03 150;
+
+    --popover: 0.18 0.04 155;
+    --popover-foreground: 0.94 0.03 150;
+
+    /* Vivid botanical green — hedge walls, primary arcade action */
+    --primary: 0.72 0.19 150;
+    --primary-foreground: 0.14 0.035 155;
+
+    --secondary: 0.24 0.045 155;
+    --secondary-foreground: 0.86 0.03 150;
+
+    --muted: 0.24 0.045 155;
+    --muted-foreground: 0.62 0.04 150;
+
+    /* Amber-gold — Sniff glow, score, warm dog energy */
+    --accent: 0.8 0.16 85;
+    --accent-foreground: 0.16 0.04 85;
+
+    --destructive: 0.6 0.22 25;
+    --destructive-foreground: 0.95 0.02 25;
+
+    --success: 0.72 0.19 150;
+    --warning: 0.8 0.16 85;
+
+    --border: 0.32 0.05 155;
+    --input: 0.32 0.05 155;
+    --ring: 0.8 0.16 85;
+
+    /* Game-specific semantic colors (referenced by HUD + canvas overlays) */
+    --hedge: 0.72 0.19 150; /* green bush walls */
+    --floor: 0.19 0.03 155; /* walkable tile */
+    --max-fur: 0.55 0.09 65; /* German Shepherd brown */
+    --carrier: 0.6 0.18 250; /* blue mail carrier */
+    --sprinkler: 0.85 0.11 220; /* light-blue sprinkler */
+    --trail: 0.86 0.2 130; /* electric-lime sniff trail */
+
+    --chart-1: 0.72 0.19 150;
+    --chart-2: 0.8 0.16 85;
+    --chart-3: 0.6 0.18 250;
+    --chart-4: 0.85 0.11 220;
+    --chart-5: 0.86 0.2 130;
+
+    --sidebar: 0.18 0.04 155;
+    --sidebar-foreground: 0.94 0.03 150;
+    --sidebar-primary: 0.72 0.19 150;
+    --sidebar-primary-foreground: 0.14 0.035 155;
+    --sidebar-accent: 0.24 0.045 155;
+    --sidebar-accent-foreground: 0.86 0.03 150;
+    --sidebar-border: 0.32 0.05 155;
+    --sidebar-ring: 0.8 0.16 85;
+
+    /* Reusable transition token */
+    --transition-smooth: all 0.15s steps(4, end);
+  }
+
+  /* The arcade is intentionally single-theme (dark forest). .dark mirrors :root
+     so the class-based darkMode config never washes the palette out. */
+  .dark {
+    --background: 0.16 0.035 155;
+    --foreground: 0.94 0.03 150;
+    --card: 0.2 0.04 155;
+    --card-foreground: 0.94 0.03 150;
+    --popover: 0.18 0.04 155;
+    --popover-foreground: 0.94 0.03 150;
+    --primary: 0.72 0.19 150;
+    --primary-foreground: 0.14 0.035 155;
+    --secondary: 0.24 0.045 155;
+    --secondary-foreground: 0.86 0.03 150;
+    --muted: 0.24 0.045 155;
+    --muted-foreground: 0.62 0.04 150;
+    --accent: 0.8 0.16 85;
+    --accent-foreground: 0.16 0.04 85;
+    --destructive: 0.6 0.22 25;
+    --destructive-foreground: 0.95 0.02 25;
+    --border: 0.32 0.05 155;
+    --input: 0.32 0.05 155;
+    --ring: 0.8 0.16 85;
+    --sidebar: 0.18 0.04 155;
+    --sidebar-foreground: 0.94 0.03 150;
+    --sidebar-primary: 0.72 0.19 150;
+    --sidebar-primary-foreground: 0.14 0.035 155;
+    --sidebar-accent: 0.24 0.045 155;
+    --sidebar-accent-foreground: 0.86 0.03 150;
+    --sidebar-border: 0.32 0.05 155;
+    --sidebar-ring: 0.8 0.16 85;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    /* Subtle pixel-grid texture behind the arcade cabinet */
+    background-image: linear-gradient(
+        oklch(0.72 0.19 150 / 0.04) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, oklch(0.72 0.19 150 / 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  /* Arcade HUD text: blocky mono, wide tracking, hard pixel shadow */
+  .text-arcade {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 2px 2px 0 oklch(0.1 0.02 155);
+  }
+
+  /* Chunky pixel panel used for HUD bars and overlay screens */
+  .pixel-panel {
+    background-color: oklch(var(--card));
+    border: 3px solid oklch(var(--border));
+    box-shadow: inset 0 0 0 3px oklch(var(--background)), 6px 6px 0 0
+      oklch(0.1 0.02 155);
+  }
+
+  /* Hard-edged pixel button — no blur, no radius */
+  .pixel-button {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: oklch(var(--primary));
+    color: oklch(var(--primary-foreground));
+    border: 3px solid oklch(var(--background));
+    box-shadow: 4px 4px 0 0 oklch(0.1 0.02 155);
+    transition: transform 0.08s steps(2, end), box-shadow 0.08s steps(2, end);
+  }
+  .pixel-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 0 oklch(0.1 0.02 155);
+  }
+  .pixel-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 0 oklch(0.1 0.02 155);
+  }
+
+  /* Sniff meter fill: amber-gold -> electric-lime */
+  .sniff-fill {
+    background-image: linear-gradient(
+      90deg,
+      oklch(var(--accent)) 0%,
+      oklch(var(--trail)) 100%
+    );
+  }
+
+  .glow-trail {
+    box-shadow: 0 0 0 2px oklch(var(--trail) / 0.6), 0 0 12px
+      oklch(var(--trail) / 0.5);
+  }
+}
+
+/* Respect the user's motion preference: suppress pulsing/entrance animations.
+   Canvas-driven effects (shake, vignette, pulse ring) are gated in render.ts. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pixel-pop,
+  .animate-trail-pulse,
+  .animate-sniff-shimmer,
+  .animate-heart-loss {
+    animation: none !important;
+  }
+}

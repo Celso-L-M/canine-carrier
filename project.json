@@ -1,0 +1,21 @@
+{
+  "overview": "A retro 8-bit maze game where Max the German Shepherd sniffs out lost items while dodging mail carriers and sprinklers.",
+  "features": [
+    "Play a retro 8-bit maze game as Max the German Shepherd",
+    "Sniff out hidden lost items with a glowing trail",
+    "Dodge patrolling mail carriers and cycling sprinklers",
+    "Advance through levels with increasing difficulty",
+    "Pause and resume the game at any time",
+    "Play on phones and tablets with on-screen touch controls",
+    "Track your best score and items collected"
+  ],
+  "category": "game",
+  "tags": [
+    "retro",
+    "arcade",
+    "maze",
+    "8-bit",
+    "game"
+  ],
+  "last_updated": "2026-10-29T11:06:18.758Z"
+}

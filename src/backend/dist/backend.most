@@ -1,0 +1,56 @@
+// Version: 4.0.0
+type AccessControlState__201339279 =
+  {
+    var adminAssigned : Bool;
+    userRoles : Map__230067015<Principal, UserRole__91647283>
+  };
+type ControlScheme__418458781 = {#arrows; #wasd};
+type ControlScheme__717100287 = {#arrows; #wasd};
+type Data__44217153<K, V> = {var count : Nat__227979830; kvs : [var ?(K, V)]};
+type Internal__283199666<K, V> =
+  {children : [var ?Node__204828119<K, V>]; data : Data__44217153<K, V>};
+type Leaf__598469445<K, V> = {data : Data__44217153<K, V>};
+type Map__230067015<K, V> = Map__405889023<K, V>;
+type Map__405889023<K, V> = Map__603270868<K, V>;
+type Map__603270868<K, V> =
+  {var root : Node__204828119<K, V>; var size : Nat__227979830};
+type Nat__227979830 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NewActor__769816496 =
+  {
+    accessControlState : AccessControlState__201339279;
+    settings : Map__230067015<UserId__39544917, PlayerSettings__671399398>;
+    stats : Map__230067015<UserId__39544917, PlayerStats__372750589>
+  };
+type Node__204828119<K, V> =
+  {#internal : Internal__283199666<K, V>; #leaf : Leaf__598469445<K, V>};
+type OldActor__512397517 = {};
+type PlayerSettings__360222749 =
+  {controlScheme : ControlScheme__717100287; soundEnabled : Bool};
+type PlayerSettings__671399398 =
+  {controlScheme : ControlScheme__418458781; soundEnabled : Bool};
+type PlayerStats__372750589 = {bestScore : Nat; totalItemsCollected : Nat};
+type PlayerStats__65227480 = {bestScore : Nat; totalItemsCollected : Nat};
+type UserId__158757552 = Principal;
+type UserId__39544917 = Principal;
+type UserRole__91647283 = {#admin; #guest; #user};
+{
+  "00000000_000000" : OldActor__512397517 -> NewActor__769816496
+}
+actor  {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__230067015<Principal, UserRole__91647283>
+    };
+  stable settings :
+    {
+      var root : Node__204828119<UserId__158757552, PlayerSettings__360222749>;
+      var size : Nat__227979830
+    };
+  stable stats :
+    {
+      var root : Node__204828119<UserId__158757552, PlayerStats__65227480>;
+      var size : Nat__227979830
+    }
+};
